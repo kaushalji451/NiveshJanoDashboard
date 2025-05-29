@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../context/context";
+import CandidateNavigate from "../component/CandidateNavigate"
 const Login = () => {
   const { setUser } = useContext(AuthContext);
 
@@ -42,7 +43,8 @@ const Login = () => {
         if (decodedToken.role === "admin") {
           navigate("/Dashboard");
         } else if (decodedToken.role === "candidate") {
-          navigate("/assessment", { state: { id: decodedToken.candidateId } });
+        let page =await CandidateNavigate(decodedToken.candidateId);
+        navigate(`${page}`,{ state: { id: decodedToken.candidateId } });
         } else {
           navigate("/home");
         }

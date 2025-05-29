@@ -5,26 +5,26 @@ const { CandidateModel } = require("../models/candidates");
 const dotenv = require("dotenv");
 connectDb();
 
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+// const multer = require("multer");
+// const cloudinary = require("cloudinary").v2;
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-// Multer Cloudinary Storage
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "uploads", // optional folder in Cloudinary
-    allowed_formats: ["jpg", "jpeg", "png"],
-  },
-});
-const upload = multer({ storage: storage });
-dotenv.config();
+// // Cloudinary config
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+// // Multer Cloudinary Storage
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: "uploads", // optional folder in Cloudinary
+//     allowed_formats: ["jpg", "jpeg", "png"],
+//   },
+// });
+// const upload = multer({ storage: storage });
+// dotenv.config();
 
 candidatesRoute.get("/", async (req, res) => {
   try {
@@ -128,6 +128,7 @@ candidatesRoute.get('/status-counts', async (req, res) => {
 
 candidatesRoute.get("/:id", async (req, res) => {
   let { id } = req.params;
+  console.log(id);
   try {
     let data = await CandidateModel.findById(id).populate("score");
     if (data != null) {
