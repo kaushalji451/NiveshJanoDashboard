@@ -2,9 +2,52 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Assessment = () => {
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    const handleKeyDown = (e) => {
+      // Block F12, Ctrl+Shift+I/J/C/U, Ctrl+S, Ctrl+U, Ctrl+C/X
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey &&
+          e.shiftKey &&
+          ["I", "J", "C"].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && ["U", "S", "C", "X"].includes(e.key.toUpperCase()))
+      ) {
+        e.preventDefault();
+        alert("Action blocked!");
+      }
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+// refresh page if user tries to switch tab
+ useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        window.location.reload(); // Refresh the page
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   const location = useLocation();
   const userId = location.state.id;
-  
+
   const navigate = useNavigate();
   const [selected, setselected] = useState({});
   const [submited, setsubmited] = useState({});
