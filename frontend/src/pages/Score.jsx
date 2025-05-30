@@ -65,13 +65,9 @@ const Score = () => {
               <span className="ps-6">{score.totalQuestion}</span>
             </p>
             <p className="text-xl font-semibold flex justify-between border px-3 border-slate-400 bg-slate-100 rounded-xl py-1">
-              Total Correct Answers{" "}
-              <span className="ps-6">{score.rightAnswer}</span>
-            </p>
-            <p className="text-xl font-semibold flex justify-between border px-3 border-slate-400 bg-slate-100 rounded-xl py-1">
               Your Score is <span className="ps-6">{totalScore}%</span>
             </p>
-            {feedback()}
+            {feedback(totalScore)}
           </div>
           <div className="flex flex-col gap-2">
             <Link

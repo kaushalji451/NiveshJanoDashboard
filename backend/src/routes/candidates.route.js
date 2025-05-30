@@ -139,6 +139,7 @@ candidatesRoute.get("/:id", async (req, res) => {
   }
 });
 
+
 candidatesRoute.put("/:id", async (req, res) => {
   let { id } = req.params;
   let { status, aiRating, tag } = req.body;

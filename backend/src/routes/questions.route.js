@@ -16,7 +16,7 @@ questionsRoute.get("/", async (req, res) => {
   try {
     let user = await CandidateModel.findById(userId);
     let questions = await Question.find({
-      questiontype: { $in: ["Aptitude", "Personality Test", user.position] },
+      questiontype: { $in: user.position }
     });
     res.status(200).json({ message: "success", questions });
   } catch (error) {

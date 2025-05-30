@@ -3,7 +3,7 @@ const uploadCvRoute = express.Router();
 const { google } = require("googleapis");
 const multer = require("multer");
 const { Readable } = require("stream");
-const { UserModel } = require("../models/userModel");
+const { CandidateModel } = require("../models/candidates");
 
 // Multer setup for file parsing
 const storage = multer.memoryStorage(); // store file in memory
@@ -54,7 +54,7 @@ uploadCvRoute.post("/upload", upload.single("cvUrl"), async (req, res) => {
 
     console.log("File uploaded to Google Drive:", previewUrl);
 
-    const updatedUser = await UserModel.findOneAndUpdate(
+    const updatedUser = await CandidateModel.findOneAndUpdate(
       { username: username },
       { cvUrl: previewUrl },
       { new: true }
@@ -73,4 +73,22 @@ uploadCvRoute.post("/upload", upload.single("cvUrl"), async (req, res) => {
   }
 });
 
+uploadCvRoute.get("/search", async (req, res) => {
+  const { name } = req.query;
+  if (!name) {
+    return res.status(400).json({ message: "Name query parameter is required" });
+  }
+
+  try {
+    const regex = new RegExp(name, "i"); // Case-insensitive search
+    const candidates = await CandidateModel.find({
+      username: { $regex: regex },
+    }).select("username");
+    console.log("Search results:", candidates);
+    res.status(200).json({ data: candidates });
+  } catch (error) {
+    console.error("Error searching candidates:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 module.exports = uploadCvRoute;

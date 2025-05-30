@@ -59,7 +59,7 @@ const Assessment = () => {
     rightAnswer: null,
   });
 
-  const [timeLeft, settimeLeft] = useState(60 * 60);
+  const [timeLeft, settimeLeft] = useState(15 * 60);
   let timer;
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -185,7 +185,7 @@ const Assessment = () => {
             >
               <p className="font-bold">
                 <span className="bg-black text-white  px-1 rounded-xs">?</span>{" "}
-                Question {qIndex + 1}*
+                Question {qIndex + 1}
               </p>
 
               <div className="bg-zinc-100 my-2 px-4 py-4 rounded-lg">

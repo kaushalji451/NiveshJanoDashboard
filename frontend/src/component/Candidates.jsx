@@ -21,7 +21,6 @@ const Candidates = ({ status, totalCandidate }) => {
   const { pathname } = useLocation();
   let filteredData = null;
 
-
   const openModal = (id) => {
     setSelectedId(id);
     setIsModalOpen(true);
@@ -48,7 +47,6 @@ const Candidates = ({ status, totalCandidate }) => {
     };
   };
 
-
   const fetchData = async ({
     page = 1,
     limit = 10,
@@ -65,7 +63,9 @@ const Candidates = ({ status, totalCandidate }) => {
       if (gte !== undefined) params.append("gte", gte);
       if (lte !== undefined) params.append("lte", lte);
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates?${params}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/candidates?${params}`
+      );
       const result = await res.json();
 
       if (result) {
@@ -84,7 +84,9 @@ const Candidates = ({ status, totalCandidate }) => {
   useEffect(() => {
     let getData = async (page = 1, limit = 10) => {
       const params = new URLSearchParams({ page, limit });
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates/status/${status}?${params}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/candidates/status/${status}?${params}`
+      );
       const result = await res.json();
       if (result) {
         setData(result.data);
@@ -92,7 +94,7 @@ const Candidates = ({ status, totalCandidate }) => {
         setPage(result.page);
         setPages(result.pages);
       }
-    }
+    };
     if (status) {
       getData(status);
     } else {
@@ -134,54 +136,62 @@ const Candidates = ({ status, totalCandidate }) => {
         <p className="text-zinc-600 text-sm md:text-base">
           Showing {displayData?.length || 0} out of {total}
         </p>
-        {pathname === "/dashboard" && <>
-          <BulkUpdate ids={ids} setIds={setIds} refreshCallback={fetchData} />
+        {pathname === "/dashboard" && (
+          <>
+            <BulkUpdate ids={ids} setIds={setIds} refreshCallback={fetchData} />
 
-          <div className="flex flex-wrap gap-3 items-center bg-white p-3 rounded-md border border-slate-300">
-            <select
-              value={filters.position}
-              onChange={(e) => setFilters({ ...filters, position: e.target.value })}
-              className="border border-slate-300 rounded-md px-3 py-1 text-sm"
-            >
-              <option value="">All Positions</option>
-              <option value="technical_role">Technical</option>
-              <option value="business_role">Business</option>
-            </select>
+            <div className="flex flex-wrap gap-3 items-center bg-white p-3 rounded-md border border-slate-300">
+              <select
+                value={filters.position}
+                onChange={(e) =>
+                  setFilters({ ...filters, position: e.target.value })
+                }
+                className="border border-slate-300 rounded-md px-3 py-1 text-sm"
+              >
+                <option value="">All Positions</option>
+                <option value="technical_role">Technical</option>
+                <option value="business_role">Business</option>
+              </select>
 
-            <input
-              type="date"
-              value={filters.appliedOn}
-              onChange={(e) => setFilters({ ...filters, appliedOn: e.target.value })}
-              className="border border-slate-300 rounded-md px-3 py-1 text-sm"
-              placeholder="Applied On"
-            />
+              <input
+                type="date"
+                value={filters.appliedOn}
+                onChange={(e) =>
+                  setFilters({ ...filters, appliedOn: e.target.value })
+                }
+                className="border border-slate-300 rounded-md px-3 py-1 text-sm"
+                placeholder="Applied On"
+              />
 
-            <select
-              value={filters.aiRating}
-              onChange={(e) => setFilters({ ...filters, aiRating: e.target.value })}
-              className="border border-slate-300 rounded-md px-3 py-1 text-sm"
-            >
-              <option value="">All Ratings</option>
-              <option value="below7">Below 7</option>
-              <option value="above8">Above 8</option>
-            </select>
+              <select
+                value={filters.aiRating}
+                onChange={(e) =>
+                  setFilters({ ...filters, aiRating: e.target.value })
+                }
+                className="border border-slate-300 rounded-md px-3 py-1 text-sm"
+              >
+                <option value="">All Ratings</option>
+                <option value="below7">Below 7</option>
+                <option value="above8">Above 8</option>
+              </select>
 
-            <button
-              disabled={loading}
-              onClick={applyFilters}
-              className="border px-3 py-1 rounded-md text-sm bg-blue-50"
-            >
-              {!loading ? "Apply Filters" : "Filtering"}
-            </button>
+              <button
+                disabled={loading}
+                onClick={applyFilters}
+                className="border px-3 py-1 rounded-md text-sm bg-blue-50"
+              >
+                {!loading ? "Apply Filters" : "Filtering"}
+              </button>
 
-            <button
-              onClick={resetFilters}
-              className="border px-3 py-1 rounded-md text-sm bg-red-100 text-red-700"
-            >
-              Reset
-            </button>
-          </div>
-        </>}
+              <button
+                onClick={resetFilters}
+                className="border px-3 py-1 rounded-md text-sm bg-red-100 text-red-700"
+              >
+                Reset
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Table */}
@@ -200,43 +210,59 @@ const Candidates = ({ status, totalCandidate }) => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {displayData && displayData.map((candidate) => (
-              <motion.tr
-                key={candidate._id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-                className="w-full border-b border-gray-200 hover:bg-slate-300"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openModal(candidate._id)
-                }}
-              >
-                <td className="p-3 align-middle">
-                  <input
-                    type="checkbox"
-                    className="size-4"
-                    checked={ids.includes(candidate._id)}
-                    onChange={(e) => handleCheckBox(candidate._id, e.target.checked)}
-                  />
-                </td>
-                <td className="p-3 align-middle font-semibold text-black">{candidate.username?.toUpperCase()}</td>
-                <td className="p-3 align-middle font-semibold text-black">{candidate.email}</td>
-                <td className="p-3 align-middle">
-                  <span className="bg-green-200 text-green-800 px-2 py-1 rounded-md text-sm">
-                    {candidate.status}
-                  </span>
-                </td>
-                <td className="p-3 align-middle">{candidate.aiRating}%</td>
-                <td className="p-3 align-middle">{candidate.appliedOn?.split("T")[0]}</td>
-                <td className="p-3 align-middle text-sm">{candidate.tag}</td>
-                <td className="p-3 align-middle">
-                  <div className="flex justify-center items-center">
-                    <Link to={candidate.cvUrl} onClick={(e) => e.stopPropagation()} className="border px-2 py-1 text-sm rounded-sm border-slate-400">View CV</Link>
-                  </div>
-                </td>
-              </motion.tr>
-            ))}
+            {displayData &&
+              displayData.map((candidate) => (
+                <motion.tr
+                  key={candidate._id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full border-b border-gray-200 hover:bg-slate-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openModal(candidate._id);
+                  }}
+                >
+                  <td className="p-3 align-middle">
+                    <input
+                      type="checkbox"
+                      className="size-4"
+                      checked={ids.includes(candidate._id)}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) =>
+                        handleCheckBox(candidate._id, e.target.checked)
+                      }
+                    />
+                  </td>
+                  <td className="p-3 align-middle font-semibold text-black">
+                    {candidate.username?.toUpperCase()}
+                  </td>
+                  <td className="p-3 align-middle font-semibold text-black">
+                    {candidate.email}
+                  </td>
+                  <td className="p-3 align-middle">
+                    <span className="bg-green-200 text-green-800 px-2 py-1 rounded-md text-sm">
+                      {candidate.status}
+                    </span>
+                  </td>
+                  <td className="p-3 align-middle">{candidate.aiRating}%</td>
+                  <td className="p-3 align-middle">
+                    {candidate.appliedOn?.split("T")[0]}
+                  </td>
+                  <td className="p-3 align-middle text-sm">{candidate.tag}</td>
+                  <td className="p-3 align-middle">
+                    <div className="flex justify-center items-center">
+                      <Link
+                        to={candidate.cvUrl}
+                        onClick={(e) => e.stopPropagation()}
+                        className="border px-2 py-1 text-sm rounded-sm border-slate-400"
+                      >
+                        View CV
+                      </Link>
+                    </div>
+                  </td>
+                </motion.tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -255,8 +281,9 @@ const Candidates = ({ status, totalCandidate }) => {
           <button
             key={i + 1}
             onClick={() => handlePageChange(i + 1)}
-            className={`px-3 py-1 rounded-md border ${page === i + 1 ? "bg-blue-500 text-white" : "bg-white"
-              }`}
+            className={`px-3 py-1 rounded-md border ${
+              page === i + 1 ? "bg-blue-500 text-white" : "bg-white"
+            }`}
           >
             {i + 1}
           </button>

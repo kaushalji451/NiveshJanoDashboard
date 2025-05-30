@@ -20,10 +20,11 @@ const UploadResume = () => {
       setsearch("");
       return;
     }
-
+    // ff
     try {
+      console.log("Searching for candidates with name:", value);
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/candidates/search?name=${value}`
+        `${import.meta.env.VITE_API_URL}/candidate/search?name=${value}`
       );
       const result = await res.json();
       setsearch(result.data);
@@ -53,13 +54,17 @@ const UploadResume = () => {
     formData.append("cvUrl", form.resume);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/candidate/upload`, {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/candidate/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const result = await res.json();
+      setFormdata({ username: "", resume: null });
       if (result) {
-        alert("Candidate added successfully");
+        alert("Candidate Cv Updates successfully");
         close();
       }
     } catch (err) {
@@ -92,12 +97,19 @@ const UploadResume = () => {
               &times;
             </button>
 
-            <h1 className="font-bold text-2xl text-center mb-6 text-blue-700">Upload Resume</h1>
+            <h1 className="font-bold text-2xl text-center mb-6 text-blue-700">
+              Upload Resume
+            </h1>
 
-            <form onSubmit={(e) => handleClick(e, close)} className="flex flex-col gap-6">
+            <form
+              onSubmit={(e) => handleClick(e, close)}
+              className="flex flex-col gap-6"
+            >
               {/* Candidate Name */}
               <div className="relative">
-                <label htmlFor="name" className="block mb-1 font-semibold">Find Candidate</label>
+                <label htmlFor="name" className="block mb-1 font-semibold">
+                  Find Candidate
+                </label>
                 <input
                   type="text"
                   id="name"
@@ -133,7 +145,9 @@ const UploadResume = () => {
 
               {/* Resume Upload */}
               <div>
-                <label htmlFor="resume" className="block mb-1 font-semibold">Upload CV</label>
+                <label htmlFor="resume" className="block mb-1 font-semibold">
+                  Upload CV
+                </label>
                 <input
                   type="file"
                   id="resume"
