@@ -91,4 +91,21 @@ uploadCvRoute.get("/search", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+uploadCvRoute.put("/:id",async(req,res)=>{
+  const {id} = req.params;
+  console.log("Received ID:", id);
+  let form = req.body;
+  try {
+    
+  let data = await CandidateModel.findByIdAndUpdate(id,form,{new:true});
+  if(!data){
+    return res.status(404).json({message:"Candidate not found"});
+  }
+  return res.status(200).json({message:"Candidate details updated successfully",data});
+  } catch (error) {
+    console.error("Error updating candidate details:", error);
+    return res.status(500).json({message:"Failed to update candidate details"});
+  }
+})
 module.exports = uploadCvRoute;

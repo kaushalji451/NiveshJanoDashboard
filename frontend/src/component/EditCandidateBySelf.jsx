@@ -3,14 +3,15 @@ import React from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useState } from "react";
-const EditCandidateBySelf = () => {
+const EditCandidateBySelf = ({candidate,handleUser}) => {
   const [form, setForm] = useState({
-    username: "",
-    email: "",
-    phoneno: "",
-    gender: "",
-    dateOfBirth: "",
-    degree: "",
+    name  : candidate.name || "",
+    username: candidate.username || "",
+    email: candidate.email || "",
+    phoneno: candidate.phoneno || "",
+    gender: candidate.gender || "",
+    dateOfBirth: candidate.dateOfBirth || "",
+    degree: candidate.degree || "",
   });
   let handleChange = (e) => {
     setForm({
@@ -18,10 +19,10 @@ const EditCandidateBySelf = () => {
       [e.target.name]: e.target.value,
     });
   };
-  let handleSubmit = async (e) => {
+  let handleSubmit = async (e,close) => {
     e.preventDefault();
     let response = await fetch(
-      `${import.meta.env.VITE_API_URL}/candidates/${userid}`,
+      `${import.meta.env.VITE_API_URL}/candidate/${candidate._id}`,
       {
         method: "PUT",
         headers: {
@@ -30,9 +31,12 @@ const EditCandidateBySelf = () => {
         body: JSON.stringify(form),
       }
     );
-    if (response.ok) {
+    let data = await response.json();
+    if (data) {
       alert("Details updated successfully");
+      handleUser();
       close();
+
     } else {
       alert("Failed to update details");
     }
@@ -52,63 +56,79 @@ const EditCandidateBySelf = () => {
         {(close) => (
           <div className="p-4 px-6">
             <p className="text-3xl pb-4 font-bold text-center">Edit your Details</p>
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-4" onSubmit={(e)=>handleSubmit(e,close)}>
               <div className="flex flex-col">
-                <label>Name</label>
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="border rounded px-3 py-2"
+                  onChange={handleChange}
+                  value={form.name}
+                  required
+                />
+              </div>
+                  <div className="flex flex-col">
+                <label htmlFor="username">Username</label>
                 <input
                   type="text"
                   name="username"
                   className="border rounded px-3 py-2"
                   onChange={handleChange}
+                  value={form.username}
                   required
                 />
               </div>
               <div className="flex flex-col">
-                <label>Email</label>
+                <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   name="email"
                   className="border rounded px-3 py-2"
                   onChange={handleChange}
+                  value={form.email}
                   required
                 />
               </div>
               <div className="flex flex-col">
-                <label>Phone Number</label>
+                <label htmlFor="phoneno">Phone Number</label>
                 <input
                   type="tel"
                   name="phoneno"
                   className="border rounded px-3 py-2"
                   onChange={handleChange}
+                  value={form.phoneno}
                   required
                 />
               </div>
                 <div className="flex flex-col">
                     <label htmlFor="gender">Gender</label>
-                    <select name="gender" id="gender" className="border rounded px-3 py-2" onChange={handleChange} required>
-                        <option value="" disabled selected>Select your gender</option>
+                    <select name="gender" id="gender" className="border rounded px-3 py-2" value={form.gender} onChange={handleChange} required>
+                        <option value="" disabled>Select your gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Others</option>
                     </select>
                 </div>
                  <div className="flex flex-col">
-                    <label>Date Of Birth</label>
+                    <label htmlFor="dateOfBirth">Date Of Birth</label>
                     <input
                     type="date"
                     name="dateOfBirth"
                     className="border rounded px-3 py-2"
                     onChange={handleChange}
+                    value={form.dateOfBirth}
                     required
                     />
                 </div>
                  <div className="flex flex-col">
-                    <label>Degree</label>
+                    <label htmlFor="degree">Degree</label>
                     <input
                     type="text"
                     name="degree"
                     className="border rounded px-3 py-2"
                     onChange={handleChange}
+                    value={form.degree}
                     required
                     />
                 </div>

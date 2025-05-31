@@ -9,14 +9,15 @@ const CandidateDashboard = () => {
   const navigate = useNavigate();
   const [candidate, setcandidate] = useState(null);
 
+  let handleUser = async () => {
+    let data = await fetch(
+      `${import.meta.env.VITE_API_URL}/candidates/${userid}`
+    );
+    let result = await data.json();
+    setcandidate(result);
+  };
+
   useEffect(() => {
-    let handleUser = async () => {
-      let data = await fetch(
-        `${import.meta.env.VITE_API_URL}/candidates/${userid}`
-      );
-      let result = await data.json();
-      setcandidate(result);
-    };
     handleUser();
   }, [userid]);
 
@@ -43,15 +44,15 @@ const CandidateDashboard = () => {
               {candidate.name}
             </h1>
             <div className="flex gap-2">
-              <EditCandidateBySelf />
-            <button
-              className={
-                "inline-block px-5 py-1 rounded-full font-semibold text-white select-none bg-blue-600"
-              }
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+              <EditCandidateBySelf candidate={candidate} handleUser={handleUser} />
+              <button
+                className={
+                  "inline-block px-5 py-1 rounded-full font-semibold text-white select-none bg-blue-600"
+                }
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             </div>
           </div>
 
