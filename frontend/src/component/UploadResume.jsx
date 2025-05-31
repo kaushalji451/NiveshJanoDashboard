@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { motion, AnimatePresence } from "framer-motion";
 
-const UploadResume = () => {
+const UploadResume = ({ onUploadSuccess }) => {
   const [form, setFormdata] = useState({
     username: "",
     resume: null,
@@ -65,6 +65,7 @@ const UploadResume = () => {
       setFormdata({ username: "", resume: null });
       if (result) {
         alert("Candidate Cv Updates successfully");
+          onUploadSuccess();
         close();
       }
     } catch (err) {

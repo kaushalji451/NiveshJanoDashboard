@@ -3,8 +3,7 @@ import BulkUpdate from "./BulkUpdate";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import CandidateDetailsModal from "./CandidateDetailsModal";
-
-const Candidates = ({ status, totalCandidate }) => {
+const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
@@ -100,7 +99,8 @@ const Candidates = ({ status, totalCandidate }) => {
     } else {
       fetchData({ page });
     }
-  }, []);
+  }, [onUploadSuccess, status, page]);
+
 
   const displayData = filteredData !== null ? filteredData : data;
 

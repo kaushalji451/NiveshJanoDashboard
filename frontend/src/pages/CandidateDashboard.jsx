@@ -2,7 +2,7 @@ import React from "react";
 import "../candidateDashboard.css";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import EditCandidateBySelf from "../component/EditCandidateBySelf";
 const CandidateDashboard = () => {
   let location = useLocation();
   let userid = location.state.id;
@@ -42,6 +42,8 @@ const CandidateDashboard = () => {
             <h1 className="text-4xl font-semibold text-blue-800 text-center select-none max-sm:text-2xl">
               {candidate.name}
             </h1>
+            <div className="flex gap-2">
+              <EditCandidateBySelf />
             <button
               className={
                 "inline-block px-5 py-1 rounded-full font-semibold text-white select-none bg-blue-600"
@@ -50,6 +52,7 @@ const CandidateDashboard = () => {
             >
               Logout
             </button>
+            </div>
           </div>
 
           <section
@@ -120,45 +123,6 @@ const CandidateDashboard = () => {
                     month: "long",
                     day: "numeric",
                   })}
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <section
-            aria-label="Score Information"
-            className="bg-blue-50 rounded-xl p-8 shadow-md animate-fadeInUp animation-delay-500"
-          >
-            <h2 className="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-blue-500 select-none mb-6">
-              Assessment Result
-            </h2>
-            <ul className="space-y-4">
-              <li className="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all cursor-default select-text">
-                <span className="font-semibold text-gray-600">
-                  Correct Answers:
-                </span>
-                <span className="text-blue-700">
-                  {candidate.score.correctAnswer}
-                </span>
-              </li>
-              <li className="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all cursor-default select-text">
-                <span className="font-semibold text-gray-600">
-                  Total Questions:
-                </span>
-                <span className="text-blue-700">
-                  {candidate.score.totalQuestion}
-                </span>
-              </li>
-              <li className="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all cursor-default select-text">
-                <span className="font-semibold text-gray-600">Percentage:</span>
-                <span className="text-blue-700">
-                  {candidate.score.percentage}%
-                </span>
-              </li>
-              <li className="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all cursor-default select-text">
-                <span className="font-semibold text-gray-600">Time Left:</span>
-                <span className="text-blue-700">
-                  {candidate.score.timeLeft} minutes
                 </span>
               </li>
             </ul>

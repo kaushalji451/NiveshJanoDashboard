@@ -6,7 +6,13 @@ import { Menu } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const statusList = ["in-review", "recommended", "accepted", "offer-sent", "rejected"];
+const statusList = [
+  "in-review",
+  "recommended",
+  "accepted",
+  "offer-sent",
+  "rejected",
+];
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -38,17 +44,19 @@ const Dashboard = () => {
     closed: { x: "-100%", transition: { type: "tween", duration: 0.3 } },
   };
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates/status-counts`);
-        const data = await res.json();
-        setStatusCounts(data);
-      } catch (err) {
-        console.error("Error fetching status counts:", err);
-      }
-    };
+  const fetchCounts = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/candidates/status-counts`
+      );
+      const data = await res.json();
+      setStatusCounts(data);
+    } catch (err) {
+      console.error("Error fetching status counts:", err);
+    }
+  };
 
+  useEffect(() => {
     fetchCounts();
   }, [navigate]);
 
@@ -81,7 +89,10 @@ const Dashboard = () => {
       <div className={`flex-1 md:ml-64 transition-all duration-300 w-full`}>
         {/* Top Navbar */}
         <div className="sticky top-0 bg-white shadow px-4 py-3 flex justify-between items-center md:hidden z-10">
-          <button onClick={() => setSidebarOpen(true)} className="text-gray-700">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-700"
+          >
             <Menu className="w-6 h-6" />
           </button>
         </div>
@@ -92,7 +103,9 @@ const Dashboard = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-xl font-bold">Candidates</h2>
-              <p className="text-sm text-gray-500">Manage all applicants for this position</p>
+              <p className="text-sm text-gray-500">
+                Manage all applicants for this position
+              </p>
             </div>
             <div className="flex gap-2">
               <button
@@ -101,16 +114,24 @@ const Dashboard = () => {
               >
                 Export PDF
               </button>
-              <UploadResume />
+              <UploadResume onUploadSuccess={fetchCounts} />
             </div>
           </div>
 
           {/* Status Tabs */}
           <div className="flex flex-wrap gap-4 text-sm text-gray-600 border-b pb-2 mb-4">
             {statusList.map((status, i) => (
-              <a href={`/${status === "in-review" ? "to-review" : status}`} key={i} className="flex items-center gap-1 cursor-pointer">
-                {status === "in-review" ? "to-review".toUpperCase() : status.toUpperCase()}
-                <span className="text-[10px] border px-2 py-[1px] rounded border-gray-300">{statusCounts[status] || 0}</span>
+              <a
+                href={`/${status === "in-review" ? "to-review" : status}`}
+                key={i}
+                className="flex items-center gap-1 cursor-pointer"
+              >
+                {status === "in-review"
+                  ? "to-review".toUpperCase()
+                  : status.toUpperCase()}
+                <span className="text-[10px] border px-2 py-[1px] rounded border-gray-300">
+                  {statusCounts[status] || 0}
+                </span>
               </a>
             ))}
           </div>
@@ -123,7 +144,7 @@ const Dashboard = () => {
             className="bg-white rounded shadow"
           >
             <div className="overflow-y-auto bg-slate-50">
-              <Candidates />
+              <Candidates onUploadSuccess={fetchCounts} />
             </div>
           </motion.div>
         </div>
@@ -140,15 +161,21 @@ export const SidebarContent = ({ logout }) => (
     <div className="space-y-6">
       <div className="space-y-4">
         <div>
-          <h2 className="uppercase font-semibold text-xs text-gray-400 mb-2">Personal</h2>
+          <h2 className="uppercase font-semibold text-xs text-gray-400 mb-2">
+            Personal
+          </h2>
           <nav className="space-y-2">
-            <Link to='/dashboard' className="hover:text-black px-4">Dashboard</Link>
+            <Link to="/dashboard" className="hover:text-black px-4">
+              Dashboard
+            </Link>
             <p className="hover:text-black px-4">Inbox</p>
             <p className="hover:text-black px-4">Calendar</p>
           </nav>
         </div>
         <div>
-          <h2 className="uppercase font-semibold text-xs text-gray-400 mb-2">Recruitment</h2>
+          <h2 className="uppercase font-semibold text-xs text-gray-400 mb-2">
+            Recruitment
+          </h2>
           <nav className="space-y-2">
             <p className="hover:text-black px-4">Position</p>
             <p className="hover:text-black px-4">Candidate Repository</p>
@@ -181,5 +208,3 @@ export const SidebarContent = ({ logout }) => (
     </div>
   </div>
 );
-
-

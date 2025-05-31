@@ -184,7 +184,6 @@ const Assessment = () => {
               className="p-4 border rounded-md border-zinc-400 my-6 mt-2"
             >
               <p className="font-bold">
-                <span className="bg-black text-white  px-1 rounded-xs">?</span>{" "}
                 Question {qIndex + 1}
               </p>
 
