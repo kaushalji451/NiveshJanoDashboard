@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
   const id = Candidate_id;
   const [form, setForm] = useState({
-    username: "",
+    name: "",
     email: "",
-    aiRating: "",
     tag: "",
     status: ""
   });
@@ -18,10 +17,11 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
         const result = await res.json();
         if (result != null) {
           setForm({
-            username: result.username,
+            name: result.name,
             email: result.email,
             aiRating: result.aiRating,
             tag: result.tag,
+            status : result.status
           });
         }
       } catch (error) {
@@ -88,10 +88,10 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
                 <label>Name</label>
                 <input
                   type="text"
-                  name="username"
+                  name="name"
                   className="border rounded px-3 py-2"
                   onChange={handleChange}
-                  value={form.username}
+                  value={form.name}
                   required
                 />
               </div>
@@ -106,19 +106,7 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
                   required
                 />
               </div>
-              <div className="flex flex-col">
-                <label>AI Rating</label>
-                <input
-                  type="number"
-                  name="aiRating"
-                  className="border rounded px-3 py-2"
-                  min={1}
-                  max={100}
-                  onChange={handleChange}
-                  value={form.aiRating}
-                  required
-                />
-              </div>
+          
               <div className="flex flex-col">
                 <label>Tag</label>
                 <select
@@ -133,9 +121,9 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
                   <option value="Potencial Fit">Potencial Fit</option>
                   <option value="Average Portfolio">Average Portfolio</option>
                   <option value="Strong Portfolio">Strong Portfolio</option>
+                  <option value="New">New</option>
                 </select>
               </div>
-
               <div className="flex flex-col">
                 <label>Status</label>
                 <select
@@ -147,6 +135,7 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
                 >
                   <option value="">Update Status</option>
                   <option value="in-review">Review</option>
+                  <option value="applied">Applied</option>
                   <option value="recommended">Recommended</option>
                   <option value="accepted">Accepted</option>
                   <option value="offer-sent">Offer Sent</option>

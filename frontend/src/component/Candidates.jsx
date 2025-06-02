@@ -101,7 +101,6 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
     }
   }, [onUploadSuccess, status, page]);
 
-
   const displayData = filteredData !== null ? filteredData : data;
 
   const [ids, setIds] = useState([]);
@@ -203,7 +202,7 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
               <th className="p-3">Name</th>
               <th className="p-3">Email</th>
               <th className="p-3">Status</th>
-              <th className="p-3">AI Rating</th>
+              <th className="p-3">Score</th>
               <th className="p-3">Applied on</th>
               <th className="p-3">Tags</th>
               <th className="p-3">Actions</th>
@@ -223,6 +222,7 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
                     openModal(candidate._id);
                   }}
                 >
+                
                   <td className="p-3 align-middle">
                     <input
                       type="checkbox"
@@ -245,7 +245,7 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
                       {candidate.status}
                     </span>
                   </td>
-                  <td className="p-3 align-middle">{candidate.aiRating}%</td>
+                  <td className="p-3 align-middle">{candidate.score?.percentage || "0"}%</td>
                   <td className="p-3 align-middle">
                     {candidate.appliedOn?.split("T")[0]}
                   </td>

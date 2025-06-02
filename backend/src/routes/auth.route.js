@@ -78,7 +78,7 @@ authRouter.post("/signup", uploadfile.single("file"), async (req, res) => {
             SOP: sop,
             appliedOn: new Date(),
             aiRating: 0,
-            tag: "New",
+            tag: "applied",
         });
 
         await candidate.save();

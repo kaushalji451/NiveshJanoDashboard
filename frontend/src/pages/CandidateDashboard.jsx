@@ -126,6 +126,12 @@ const CandidateDashboard = () => {
                   })}
                 </span>
               </li>
+               <li className="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:bg-blue-100 hover:shadow-md transition-all cursor-default select-text">
+                <span className="font-semibold text-gray-600">Resume:</span>
+                <a href={candidate.cvUrl} className="inline-block px-5 py-1 rounded-full font-semibold text-white select-none bg-blue-600">
+                  View
+                </a>
+              </li>
             </ul>
           </section>
         </div>

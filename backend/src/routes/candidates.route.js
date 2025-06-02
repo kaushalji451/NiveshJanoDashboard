@@ -64,7 +64,8 @@ candidatesRoute.get("/", async (req, res) => {
       CandidateModel.find(filters)
         .sort({ appliedOn: -1 })
         .skip(skip)
-        .limit(parseInt(limit)),
+        .limit(parseInt(limit))
+        .populate("score"),
       CandidateModel.countDocuments(filters),
     ]);
 
@@ -92,7 +93,8 @@ candidatesRoute.get('/status/:status', async (req, res) => {
       CandidateModel.find(filters)
         .sort({ appliedOn: -1 })
         .skip(skip)
-        .limit(limit),
+        .limit(limit)
+        .populate("score"),
       CandidateModel.countDocuments(filters),
     ]);
 
@@ -142,12 +144,13 @@ candidatesRoute.get("/:id", async (req, res) => {
 
 candidatesRoute.put("/:id", async (req, res) => {
   let { id } = req.params;
-  let { status, aiRating, tag } = req.body;
+  let { status,tag,name,email } = req.body;
   try {
     let data = await CandidateModel.findByIdAndUpdate(id, {
-      status,
-      aiRating,
+      name,
+      email,
       tag,
+      status
     });
     if (data != null) {
       res.status(200).json(data);

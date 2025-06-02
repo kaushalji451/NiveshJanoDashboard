@@ -12,9 +12,6 @@ const questionsRoute = require("./routes/questions.route");
 const scoreRoute = require("./routes/score.route");
 const sendemailRoute = require("./routes/sendEmail.route");
 
-// app.use(cors({
-//   origin: process.env.CLIENT_URL,
-// }));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
@@ -28,9 +25,7 @@ app.use("/questions",questionsRoute);
 app.use("/score",scoreRoute);
 app.use("/sendEmail",sendemailRoute);
 
-
-
-app.get("/", (req, res) => {
+app.get("/", async(req, res) => {
   res.send("Hello World!");
 });
 
