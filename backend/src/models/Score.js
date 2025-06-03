@@ -17,6 +17,11 @@ const scoreSchema = new Schema({
   percentage : {
     type : Number,
     required : true,
+  },
+  selectedAnswers :{
+     type: Map,
+  of: String,
+  required: true,
   }
 });
 

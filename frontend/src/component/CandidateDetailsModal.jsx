@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import EditCandidate from "./EditCandidate";
 import { Edit, Delete } from "lucide-react";
+import ViewCandidateQ from "./ViewCandidateQ";
 
 const backdrop = {
   visible: { opacity: 1 },
@@ -19,19 +20,19 @@ const modal = {
   exit: { opacity: 0, scale: 0.75 },
 };
 
- const handleDelete = async (id) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
-    const result = await res.json();
-    if (result) {
-      alert("Deleted Successfully");
-      fetchData({ page, ...filtersToQuery(filters) });
-    } else {
-      alert("Error in Deletion");
-    }
-  };
+const handleDelete = async (id) => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (result) {
+    alert("Deleted Successfully");
+    fetchData({ page, ...filtersToQuery(filters) });
+  } else {
+    alert("Error in Deletion");
+  }
+};
 
 const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
   const [loading, setLoading] = useState(true);
@@ -62,7 +63,13 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
           exit="hidden"
           onClick={onClose}
         >
-          {edit && <EditCandidate Candidate_id={candidateId} fetchData={fetchData} onClose={() => setEdit(false)} />}
+          {edit && (
+            <EditCandidate
+              Candidate_id={candidateId}
+              fetchData={fetchData}
+              onClose={() => setEdit(false)}
+            />
+          )}
           <motion.div
             className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg relative border border-gray-200"
             variants={modal}
@@ -114,7 +121,9 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
 
                 {candidate.score && (
                   <div className="mt-4 border-t pt-4 text-sm">
-                    <h3 className="font-semibold mb-2 text-gray-800">Score Summary</h3>
+                    <h3 className="font-semibold mb-2 text-gray-800">
+                      Score Summary
+                    </h3>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <p className="font-medium">Correct Answers:</p>
@@ -132,18 +141,39 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                         <p className="font-medium">Percentage:</p>
                         <p>{candidate.score.percentage}%</p>
                       </div>
+                      <div>
+                        <p className="font-medium pb-2">
+                          Questinon Review
+                        </p>
+                          <ViewCandidateQ selectedAnswers={candidate.score.selectedAnswers} userId={candidate._id}/>
+                      </div>
                     </div>
                     <div className="flex items-center gap-5 py-3">
-                      <button onClick={(e) => {
-                         e.stopPropagation(); 
-                        setEdit(!edit)}} className="flex gap-2"><Edit size={25} color="Blue"/><span>Edit</span></button>
-                      <button onClick={() => handleDelete(candidateId)} className="flex gap-2"><Delete size={25} color="Red"/><span>Delete</span></button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEdit(!edit);
+                        }}
+                        className="flex gap-2"
+                      >
+                        <Edit size={25} color="Blue" />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(candidateId)}
+                        className="flex gap-2"
+                      >
+                        <Delete size={25} color="Red" />
+                        <span>Delete</span>
+                      </button>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="text-center text-gray-500 py-10">No candidate found.</div>
+              <div className="text-center text-gray-500 py-10">
+                No candidate found.
+              </div>
             )}
           </motion.div>
         </motion.div>

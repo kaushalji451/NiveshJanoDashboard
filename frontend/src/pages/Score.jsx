@@ -18,6 +18,7 @@ const Score = () => {
     timeLeft: timeLeftInMMSS,
     correctAnswer: score.rightAnswer,
     percentage: totalScore,
+    selectedAnswers : score.selectedAnswers
   });
   useEffect(() => {
     const submittedKey = `submitted_${userId}`;

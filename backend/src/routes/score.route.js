@@ -10,7 +10,7 @@ const scoreRoute = express.Router();
 
 scoreRoute.post("/", async (req, res) => {
   let { userId } = req.query;
-  let { correctAnswer, timeLeft, totalQuestion, percentage } = req.body;
+  let { correctAnswer, timeLeft, totalQuestion, percentage,selectedAnswers } = req.body;
   if (!userId) {
     return res.status(400).json({ message: "No userId provided" });
   }
@@ -23,6 +23,7 @@ scoreRoute.post("/", async (req, res) => {
       timeLeft,
       totalQuestion,
       percentage,
+      selectedAnswers
     });
     let scoreData = await score.save();
     let user = await CandidateModel.findById(userId);

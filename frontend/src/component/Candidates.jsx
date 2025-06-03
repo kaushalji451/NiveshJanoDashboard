@@ -222,7 +222,6 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
                     openModal(candidate._id);
                   }}
                 >
-                
                   <td className="p-3 align-middle">
                     <input
                       type="checkbox"
