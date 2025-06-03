@@ -141,12 +141,12 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                         <p className="font-medium">Percentage:</p>
                         <p>{candidate.score.percentage}%</p>
                       </div>
-                      <div>
+                      {candidate.score.selectedAnswers!=null && <div>
                         <p className="font-medium pb-2">
                           Questinon Review
                         </p>
                           <ViewCandidateQ selectedAnswers={candidate.score.selectedAnswers} userId={candidate._id}/>
-                      </div>
+                      </div>}
                     </div>
                     <div className="flex items-center gap-5 py-3">
                       <button

@@ -60,8 +60,8 @@ const ViewCandidateQ = ({ selectedAnswers, userId }) => {
                 Close
               </button>
             </div>
-
-            {questions.length > 0 &&
+             
+            {questions.length > 0 && selectedAnswers!=null &&
               questions.map((qui, qIndex) => {
                 const userSelected = selectedAnswers[qIndex];
 
