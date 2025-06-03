@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import ResumeRepo from "../component/ResumeRepo";
+import Instruction from "../component/Instruction";
 
 const statusList = [
   "in-review",
@@ -168,8 +170,7 @@ export const SidebarContent = ({ logout }) => (
             <Link to="/dashboard" className="hover:text-black px-4">
               Dashboard
             </Link>
-            <p className="hover:text-black px-4">Inbox</p>
-            <p className="hover:text-black px-4">Calendar</p>
+            <Instruction/>
           </nav>
         </div>
         <div>
@@ -177,9 +178,8 @@ export const SidebarContent = ({ logout }) => (
             Recruitment
           </h2>
           <nav className="space-y-2">
-            <p className="hover:text-black px-4">Position</p>
-            <p className="hover:text-black px-4">Candidate Repository</p>
-            <p className="hover:text-black px-4">Company Profile</p>
+            <p className="hover:text-black px-4">Interview Scheduler</p>
+            <ResumeRepo/>
           </nav>
         </div>
       </div>

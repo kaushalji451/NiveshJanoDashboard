@@ -26,6 +26,16 @@ connectDb();
 // const upload = multer({ storage: storage });
 // dotenv.config();
 
+candidatesRoute.get("/alluser",async(req,res)=>{
+  try {
+    let data = await CandidateModel.find({});
+    res.status(200).json({data});
+  } catch (error) {
+      console.error("Error fetching candidates:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+})
+
 candidatesRoute.get("/", async (req, res) => {
   try {
     const {
