@@ -77,7 +77,6 @@ authRouter.post("/signup", uploadfile.single("file"), async (req, res) => {
             cvUrl: Url,
             SOP: sop,
             appliedOn: new Date(),
-            aiRating: 0,
             tag: "applied",
         });
 

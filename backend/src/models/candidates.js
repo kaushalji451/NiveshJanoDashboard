@@ -41,9 +41,6 @@ const candidateSchema = new Schema({
     default: 'applied',
     required: true
   },
-  aiRating: {
-    type: Number,
-  },
   appliedOn: {
     type: Date,
   },

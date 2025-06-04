@@ -113,10 +113,6 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                       {new Date(candidate.appliedOn).toLocaleDateString()}
                     </p>
                   </div>
-                  <div>
-                    <p className="font-medium">AI Rating:</p>
-                    <p className="text-gray-700">{candidate.aiRating}/100</p>
-                  </div>
                 </div>
 
                 {candidate.score && (

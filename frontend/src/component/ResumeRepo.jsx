@@ -46,12 +46,6 @@ const ResumeRepo = () => {
                   </a>
                 </div>
               ))}
-              {/* <div className="bg-blue-100 p-2 hover:bg-blue-200 rounded-md flex justify-between items-center px-5">
-                <p className="font-semibold text-xl">Abhishek</p>
-                <a href="" className="bg-blue-500 text-white p-2 rounded-md">
-                  View Resume
-                </a>
-              </div> */}
             </div>
 
             <p className="text-center pt-10 opacity-50 text-lg">

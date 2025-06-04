@@ -9,7 +9,7 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
   const [filters, setFilters] = useState({
     position: "",
     appliedOn: "",
-    aiRating: "",
+    score: "",
   });
 
   const [total, setTotal] = useState(0);
@@ -31,18 +31,18 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
   };
 
   const resetFilters = () => {
-    setFilters({ position: "", from: "", to: "", aiRating: "" });
+    setFilters({ position: "", from: "", to: "" });
     setPage(1);
     fetchData({ page: 1, limit: 10 });
   };
 
   const filtersToQuery = (filters) => {
-    const { appliedOn, position, aiRating } = filters;
+    const { appliedOn, position, score } = filters;
+
     return {
       position: position || undefined,
       appliedOn: appliedOn || undefined,
-      gte: aiRating === "above8" ? 8 : undefined,
-      lte: aiRating === "below7" ? 7 : undefined,
+      score: score || undefined,
     };
   };
 
@@ -51,22 +51,19 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
     limit = 10,
     position,
     appliedOn,
-    gte,
-    lte,
+    score,
   } = {}) => {
     try {
       const params = new URLSearchParams({ page, limit });
       setLoading(true);
       if (position) params.append("position", position);
       if (appliedOn) params.append("appliedOn", appliedOn);
-      if (gte !== undefined) params.append("gte", gte);
-      if (lte !== undefined) params.append("lte", lte);
+      params.append("score", score);
 
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/candidates?${params}`
       );
       const result = await res.json();
-
       if (result) {
         setData(result.data);
         setTotal(result.total);
@@ -161,17 +158,20 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
                 className="border border-slate-300 rounded-md px-3 py-1 text-sm"
                 placeholder="Applied On"
               />
-
               <select
-                value={filters.aiRating}
-                onChange={(e) =>
-                  setFilters({ ...filters, aiRating: e.target.value })
-                }
+                value={filters.score}
+                onChange={(e) => {
+                  setFilters({ ...filters, score: e.target.value });
+                  console.log(e.target.value);
+                }}
                 className="border border-slate-300 rounded-md px-3 py-1 text-sm"
               >
-                <option value="">All Ratings</option>
-                <option value="below7">Below 7</option>
-                <option value="above8">Above 8</option>
+                <option value="">Score</option>
+                <option value="0-20">0-20%</option>
+                <option value="20-40">20-40%</option>
+                <option value="40-60">40-60%</option>
+                <option value="60-80">60-80%</option>
+                <option value="80-100">80-100%</option>
               </select>
 
               <button
@@ -244,7 +244,9 @@ const Candidates = ({ status, totalCandidate, onUploadSuccess }) => {
                       {candidate.status}
                     </span>
                   </td>
-                  <td className="p-3 align-middle">{candidate.score?.percentage || "0"}%</td>
+                  <td className="p-3 align-middle">
+                    {candidate.scoreDetails ? candidate.scoreDetails?.percentage || "0" : candidate.score?.percentage || "0" }
+                  </td>
                   <td className="p-3 align-middle">
                     {candidate.appliedOn?.split("T")[0]}
                   </td>

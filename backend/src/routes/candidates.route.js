@@ -5,52 +5,47 @@ const { CandidateModel } = require("../models/candidates");
 const dotenv = require("dotenv");
 connectDb();
 
-// const multer = require("multer");
-// const cloudinary = require("cloudinary").v2;
-// const { CloudinaryStorage } = require("multer-storage-cloudinary");
-
-// // Cloudinary config
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
-// // Multer Cloudinary Storage
-// const storage = new CloudinaryStorage({
-//   cloudinary: cloudinary,
-//   params: {
-//     folder: "uploads", // optional folder in Cloudinary
-//     allowed_formats: ["jpg", "jpeg", "png"],
-//   },
-// });
-// const upload = multer({ storage: storage });
-// dotenv.config();
-
-candidatesRoute.get("/alluser",async(req,res)=>{
+candidatesRoute.get("/alluser", async (req, res) => {
   try {
     let data = await CandidateModel.find({});
-    res.status(200).json({data});
+    res.status(200).json({ data });
   } catch (error) {
-      console.error("Error fetching candidates:", error);
+    console.error("Error fetching candidates:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-})
-
+});
 candidatesRoute.get("/", async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      position,
-      appliedOn,
-      gte,
-      lte,
-    } = req.query;
+    let { page = 1, limit = 10, position, appliedOn, score } = req.query;
 
-    const filters = {};
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    // Validate pagination inputs
+    if (isNaN(page) || page < 1 || isNaN(limit) || limit < 1) {
+      return res.status(400).json({ message: "Invalid page or limit" });
+    }
+
+    const skip = (page - 1) * limit;
+
+    // Default score range
+    let min = 0;
+    let max = 100;
+
+    // Validate and extract score range
+    if (score && /^\d+(\.\d+)?-\d+(\.\d+)?$/.test(score)) {
+      const [minStr, maxStr] = score.split("-");
+      min = parseFloat(minStr);
+      max = parseFloat(maxStr);
+    }
+
+    // Build match stage
+    const matchStage = {
+      "scoreDetails.percentage": { $gte: min, $lte: max },
+    };
 
     if (position) {
-      filters.position = position;
+      matchStage.position = position;
     }
 
     if (appliedOn) {
@@ -58,31 +53,44 @@ candidatesRoute.get("/", async (req, res) => {
       start.setHours(0, 0, 0, 0);
       const end = new Date(appliedOn);
       end.setHours(23, 59, 59, 999);
-
-      filters.appliedOn = { $gte: start, $lte: end };
+      matchStage.appliedOn = { $gte: start, $lte: end };
     }
 
-    if (gte || lte) {
-      filters.aiRating = {};
-      if (gte) filters.aiRating.$gte = Number(gte);
-      if (lte) filters.aiRating.$lte = Number(lte);
-    }
+    // Common stages
+    const lookupAndUnwind = [
+      {
+        $lookup: {
+          from: "scores",
+          localField: "score",
+          foreignField: "_id",
+          as: "scoreDetails",
+        },
+      },
+      { $unwind: "$scoreDetails" },
+    ];
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-
+    // Parallel aggregation: paginated data and total count
     const [data, total] = await Promise.all([
-      CandidateModel.find(filters)
-        .sort({ appliedOn: -1 })
-        .skip(skip)
-        .limit(parseInt(limit))
-        .populate("score"),
-      CandidateModel.countDocuments(filters),
+      CandidateModel.aggregate([
+        ...lookupAndUnwind,
+        { $match: matchStage },
+        { $sort: { appliedOn: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ]),
+      CandidateModel.aggregate([
+        ...lookupAndUnwind,
+        { $match: matchStage },
+        { $count: "total" },
+      ]),
     ]);
 
+    const totalCount = total[0]?.total || 0;
+
     res.status(200).json({
-      total,
-      page: parseInt(page),
-      pages: Math.ceil(total / parseInt(limit)),
+      total: totalCount,
+      page,
+      pages: Math.ceil(totalCount / limit),
       data,
     });
   } catch (error) {
@@ -91,7 +99,9 @@ candidatesRoute.get("/", async (req, res) => {
   }
 });
 
-candidatesRoute.get('/status/:status', async (req, res) => {
+
+
+candidatesRoute.get("/status/:status", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
@@ -116,14 +126,14 @@ candidatesRoute.get('/status/:status', async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching candidates by status:", error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-candidatesRoute.get('/status-counts', async (req, res) => {
+candidatesRoute.get("/status-counts", async (req, res) => {
   try {
     const result = await CandidateModel.aggregate([
-      { $group: { _id: "$status", count: { $sum: 1 } } }
+      { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
 
     const counts = result.reduce((acc, item) => {
@@ -136,7 +146,6 @@ candidatesRoute.get('/status-counts', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch status counts" });
   }
 });
-
 
 candidatesRoute.get("/:id", async (req, res) => {
   let { id } = req.params;
@@ -151,16 +160,15 @@ candidatesRoute.get("/:id", async (req, res) => {
   }
 });
 
-
 candidatesRoute.put("/:id", async (req, res) => {
   let { id } = req.params;
-  let { status,tag,name,email } = req.body;
+  let { status, tag, name, email } = req.body;
   try {
     let data = await CandidateModel.findByIdAndUpdate(id, {
       name,
       email,
       tag,
-      status
+      status,
     });
     if (data != null) {
       res.status(200).json(data);
@@ -204,4 +212,3 @@ candidatesRoute.patch("/bulk-update", async (req, res) => {
 
 module.exports = candidatesRoute;
 module.exports = candidatesRoute;
-

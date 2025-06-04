@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-// import AddCandidate from "./pages/AddCandidate";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -26,7 +25,6 @@ const App = () => {
             </RoleRoute>
           }
         />
-        {/* <Route path="/add" element={<RoleRoute requiredRole="admin"><AddCandidate /></RoleRoute>} /> */}
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route

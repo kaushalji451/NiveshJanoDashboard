@@ -19,7 +19,6 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
           setForm({
             name: result.name,
             email: result.email,
-            aiRating: result.aiRating,
             tag: result.tag,
             status : result.status
           });

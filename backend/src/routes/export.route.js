@@ -23,7 +23,6 @@ async function createPDF(users, res) {
       .text(`Name: ${user.username}`, { marginTop: 10 })
       .text(`Email: ${user.email}`)
       .text(`Status: ${user.status || "N/A"}`)
-      .text(`AI Rating: ${user.aiRating || "N/A"}`)
       .text(`Applied On: ${new Date(user.appliedOn).toDateString()}`)
       .text(`Tag: ${user.tag || "N/A"}`)
       .text(`CV URL: ${user.cvUrl || "Not Provided"}`);
