@@ -30,21 +30,6 @@ const Assessment = () => {
     };
   }, []);
 
-// refresh page if user tries to switch tab
- useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        window.location.reload(); // Refresh the page
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
-
   
   const location = useLocation();
   const userId = location.state.id;

@@ -45,6 +45,7 @@ const Login = () => {
         } else if (decodedToken.role === "candidate") {
         let page =await CandidateNavigate(decodedToken.candidateId);
         navigate(`${page}`,{ state: { id: decodedToken.candidateId } });
+        console.log(decodedToken.candidateId);
         } else {
           navigate("/home");
         }

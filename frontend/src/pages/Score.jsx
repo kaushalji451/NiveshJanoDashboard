@@ -1,8 +1,9 @@
 import React, { use, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import { useState } from "react";
 import feedback from "../component/Feedback";
 const Score = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const userId = location.state.userId;
   const score = location.state.score;
@@ -54,6 +55,11 @@ const Score = () => {
     }
   }, [userId, scoreDetails]);
 
+  let handleNavigate = ()=>{
+    navigate(`/candidateDashboard`,{ state: { id: userId } });
+  }
+
+
   return (
     <>
       <div className="flex justify-center h-[100vh]  items-center flex-col  bg-slate-100">
@@ -71,12 +77,12 @@ const Score = () => {
             {feedback(totalScore)}
           </div>
           <div className="flex flex-col gap-2">
-            <Link
-              to={"/login"}
-              className=" px-5 py-2.5 text-center me-2 mb-2"
+            <button
+            onClick={handleNavigate}
+              className=" px-5 py-2.5 text-center me-2 mb-2 cursor-pointer"
             >
               Go to Dashboard
-            </Link>
+            </button>
           </div>
         </div>
       </div>
