@@ -7,9 +7,8 @@ import RoleRoute from "./component/RoleRoute";
 import Assessment from "./pages/Assessment";
 import Score from "./pages/Score";
 import ToReview from "./pages/ToReview";
-import Recommended from "./pages/Recommended";
 import Accepted from "./pages/Accepted";
-import OfferSent from "./pages/OfferSent";
+import Selected from "./pages/Selected"
 import Rejected from "./pages/Rejected";
 import CandidateDashboard from "./pages/CandidateDashboard";
 
@@ -54,14 +53,6 @@ const App = () => {
           }
         />
         <Route
-          path="/recommended"
-          element={
-            <RoleRoute requiredRole="admin">
-              <Recommended />
-            </RoleRoute>
-          }
-        />
-        <Route
           path="/accepted"
           element={
             <RoleRoute requiredRole="admin">
@@ -70,10 +61,10 @@ const App = () => {
           }
         />
         <Route
-          path="/offer-sent"
+          path="/selected"
           element={
             <RoleRoute requiredRole="admin">
-              <OfferSent />
+              <Selected />
             </RoleRoute>
           }
         />

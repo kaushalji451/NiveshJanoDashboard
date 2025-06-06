@@ -10,9 +10,8 @@ import Instruction from "../component/Instruction";
 
 const statusList = [
   "in-review",
-  "recommended",
   "accepted",
-  "offer-sent",
+  "selected",
   "rejected",
 ];
 

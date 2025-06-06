@@ -7,7 +7,7 @@ import { Menu } from "lucide-react";
 import Candidates from "./Candidates";
 import UploadResume from "./UploadResume";
 
-const statusList = ["in-review", "recommended", "accepted", "offer-sent", "rejected"];
+const statusList = ["in-review", "accepted", "selected", "rejected"];
 
 function StatusPages({page}) {
     const [sidebarOpen, setSidebarOpen] = useState(false);

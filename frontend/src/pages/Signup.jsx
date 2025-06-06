@@ -26,12 +26,15 @@ const Home = () => {
 
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, fd);
-
-      if (res.data) {
-        localStorage.setItem("UserInfo", JSON.stringify(res.data.userSaved));
+    
+      if(res.status === 200){
+        alert("user is allredy exist plese login.");
         navigate("/login");
-      } else {
-        alert("Failed: " + data.message);
+      }
+      if (res.data && res.status === 201) {
+        localStorage.setItem("UserInfo", JSON.stringify(res.data.userSaved));
+        alert("you are successfull registerd please login.")
+        navigate("/login");
       }
     } catch (err) {
       console.error("Error submitting form:", err);
@@ -39,12 +42,6 @@ const Home = () => {
   };
 
   const sopValue = watch("sop") || "";
-
-  function get18YearsAgo() {
-    const today = new Date();
-    today.setFullYear(today.getFullYear() - 18);
-    return today.toISOString().split("T")[0];
-  }
 
 
   return (
@@ -118,7 +115,6 @@ const Home = () => {
             id="dob"
             {...register("dob")}
             type="date"
-            max={get18YearsAgo()}
             placeholder="Date of Birth (e.g., 1999-01-01)"
             className="p-2 border mt-2 border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

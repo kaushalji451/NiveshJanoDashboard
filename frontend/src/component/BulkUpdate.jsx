@@ -59,11 +59,10 @@ const BulkUpdate = ({ ids, setIds, refreshCallback }) => {
                   onChange={(e) => setStatus(e.target.value)}
                 >
                   <option value="">Select Candidate status</option>
-                  <option value="Selected">Selected</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Pending">Pending</option>
-                  <option value="In Review">In Review</option>
-                  <option value="New">New</option>
+                  <option value="selected">Selected</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="in-review">In Review</option>
+                  <option value="accepted">Accepted</option>
                 </select>
               </div>
 

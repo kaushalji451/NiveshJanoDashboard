@@ -132,13 +132,11 @@ const EditCandidate = ({ Candidate_id, fetchData, onClose }) => {
                   value={form.status}
                   required
                 >
-                  <option value="">Update Status</option>
-                  <option value="in-review">Review</option>
-                  <option value="applied">Applied</option>
-                  <option value="recommended">Recommended</option>
-                  <option value="accepted">Accepted</option>
-                  <option value="offer-sent">Offer Sent</option>
+                 <option value="">Update Candidate status</option>
+                  <option value="selected">Selected</option>
                   <option value="rejected">Rejected</option>
+                  <option value="in-review">In Review</option>
+                  <option value="accepted">Accepted</option>
                 </select>
               </div>
 

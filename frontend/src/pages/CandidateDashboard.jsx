@@ -27,10 +27,10 @@ const CandidateDashboard = () => {
 
   // Map status to Tailwind bg color classes
   const statusClasses = {
-    applied: "bg-blue-600",
+    accepted: "bg-blue-600",
     "in-review": "bg-yellow-500",
-    recommended: "bg-green-600",
-    accepted: "bg-green-500",
+    review: "bg-green-600",
+    selected: "bg-green-500",
     "offer-sent": "bg-purple-600",
     rejected: "bg-red-600",
   };

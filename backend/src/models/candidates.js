@@ -37,8 +37,8 @@ const candidateSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['applied','in-review', 'recommended', 'accepted', 'offer-sent', 'rejected'],
-    default: 'applied',
+    enum: ['in-review', 'accepted', 'Selected', 'rejected'],
+    default: 'accepted',
     required: true
   },
   appliedOn: {

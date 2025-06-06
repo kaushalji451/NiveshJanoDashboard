@@ -41,9 +41,9 @@ authRouter.post("/signup", uploadfile.single("file"), async (req, res) => {
 
     try {
         // hash password
-        const existedUser = await UserModel.findOne({ username });
+        const existedUser = await UserModel.findOne({ email });
         if (existedUser) {
-            return res.status(400).json({ message: "Username already exists" });
+            return res.status(200).json({ message: "Username already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

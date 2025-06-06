@@ -4,7 +4,7 @@ import axios from "axios";
 import EditCandidate from "./EditCandidate";
 import { Edit, Delete } from "lucide-react";
 import ViewCandidateQ from "./ViewCandidateQ";
-
+import Sop from "./Sop";
 const backdrop = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
@@ -20,7 +20,7 @@ const modal = {
   exit: { opacity: 0, scale: 0.75 },
 };
 
-const handleDelete = async (id) => {
+const handleDelete = async (id,fetchData,onClose) => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/candidates/${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
@@ -28,7 +28,8 @@ const handleDelete = async (id) => {
   const result = await res.json();
   if (result) {
     alert("Deleted Successfully");
-    fetchData({ page, ...filtersToQuery(filters) });
+    fetchData();
+    onClose();
   } else {
     alert("Error in Deletion");
   }
@@ -94,6 +95,7 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                 <div className="flex items-center gap-4">
                   <div>
                     <h2 className="text-xl font-semibold">{candidate.name}</h2>
+                    {console.log(candidate.SOP)}
                     <p className="text-sm text-gray-500">{candidate.email}</p>
                   </div>
                 </div>
@@ -137,6 +139,11 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                         <p className="font-medium">Percentage:</p>
                         <p>{candidate.score.percentage}%</p>
                       </div>
+                      <div>
+                        <p className="font-medium pb-2">Sop</p>
+                        <Sop sop={candidate.SOP}/>
+                      </div>
+
                       {candidate.score.selectedAnswers!=null && <div>
                         <p className="font-medium pb-2">
                           Questinon Review
@@ -156,7 +163,7 @@ const CandidateDetailsModal = ({ isOpen, onClose, candidateId, fetchData }) => {
                         <span>Edit</span>
                       </button>
                       <button
-                        onClick={() => handleDelete(candidateId)}
+                        onClick={() => handleDelete(candidateId,fetchData,onClose)}
                         className="flex gap-2"
                       >
                         <Delete size={25} color="Red" />

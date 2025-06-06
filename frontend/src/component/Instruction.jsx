@@ -133,17 +133,11 @@ const Instruction = () => {
                 </li>
                 <li>
                   <code className="bg-blue-100 rounded px-1 text-blue-800">
-                    Recommended
-                  </code>{" "}
-                  – Candidates marked as recommended for next steps.
-                </li>
-                <li>
-                  <code className="bg-blue-100 rounded px-1 text-blue-800">
                     Accepted
                   </code>
                   ,{" "}
                   <code className="bg-blue-100 rounded px-1 text-blue-800">
-                    Offer Sent
+                    Selected
                   </code>
                   ,{" "}
                   <code className="bg-blue-100 rounded px-1 text-blue-800">
