@@ -2,6 +2,7 @@ const express = require("express");
 const candidatesRoute = express.Router();
 const connectDb = require("../initdb/connectDb");
 const { CandidateModel } = require("../models/candidates");
+const {UserModel} = require("../models/userModel");
 const dotenv = require("dotenv");
 connectDb();
 
@@ -185,6 +186,8 @@ candidatesRoute.delete("/:id", async (req, res) => {
   let { id } = req.params;
   try {
     let data = await CandidateModel.findByIdAndDelete(id);
+    let res = await UserModel.findOneAndDelete({email : data.email});
+    console.log(res);
     if (data) {
       res.status(200).json(data);
     } else {

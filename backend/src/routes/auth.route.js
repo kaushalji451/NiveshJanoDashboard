@@ -23,7 +23,7 @@ authRouter.post("/signup", uploadfile.single("file"), async (req, res) => {
         return res.status(400).json({ message: "No file uploaded" });
     }
 
-
+    
 
     // Log form data and file
     console.log("Form data:", req.body);
