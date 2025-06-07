@@ -8,12 +8,7 @@ import Cookies from "js-cookie";
 import ResumeRepo from "../component/ResumeRepo";
 import Instruction from "../component/Instruction";
 
-const statusList = [
-  "in-review",
-  "accepted",
-  "selected",
-  "rejected",
-];
+const statusList = ["in-review", "accepted", "selected", "rejected"];
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -169,7 +164,7 @@ export const SidebarContent = ({ logout }) => (
             <Link to="/dashboard" className="hover:text-black px-4">
               Dashboard
             </Link>
-            <Instruction/>
+            <Instruction />
           </nav>
         </div>
         <div>
@@ -177,8 +172,13 @@ export const SidebarContent = ({ logout }) => (
             Recruitment
           </h2>
           <nav className="space-y-2">
-            <p className="hover:text-black px-4">Interview Scheduler</p>
-            <ResumeRepo/>
+            <a
+              href="https://interview-shaduler.vercel.app/"
+              className="hover:text-black px-4"
+            >
+              Interview Scheduler
+            </a>
+            <ResumeRepo />
           </nav>
         </div>
       </div>
